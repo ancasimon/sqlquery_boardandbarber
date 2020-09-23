@@ -27,7 +27,7 @@
 	--Add Foreign Key (customerId) References Customer(customerId)
 
 	insert into Customer([name],birthday,favoriteBarber,notes)
-	values('Aaron', '5/27/1986', 'Geoff', 'needs a haircut!')
+	values('Nathan', '5/27/1986', 'Geoff', 'needs a haircut!')
 
 	select *
 	from Customer
@@ -44,7 +44,7 @@
 --);
 
 insert Appointment(customerId,date,length,barber)
-values(2, '2020-09-20', 60, 'barber2')
+values(1, '2020-09-20', 60, 'barber3')
 
 
 --ADD PAYMENTS - using variables:
@@ -72,3 +72,50 @@ from Appointment
 
 insert into Payment(appointmentId,discount,paymentType,payer)
 values(@appointmentId,@discount,@paymentType,@payer)
+
+delete
+from Appointment
+where appointmentId = 3
+
+select *
+from Payment
+
+update Appointment
+set date = '9/30/2020',
+	barber = 'Stanley'
+where appointmentId = 4
+
+-- you can also join tables inside the update (or delete - although not recommended) statement
+--update all of Nathan's appointments to be with the customer's new favorite barber:
+update Appointment
+set barber = 'Stanley'
+from Appointment a
+	join Customer c
+		on c.customerId = a.customerId
+where c.name = 'Nathan'
+
+
+--ANCA: To copy from Nathan:
+--set favorite barber:
+update Customer
+set favoriteBarber = 'Stanley'
+where name = 'Nathan'
+
+--then change a specific appointment
+update Appointment
+set date = '9/30/2020'.
+	barber = 'Stanley'
+where appointmentId = 2
+
+--then change all my appointments with the value from the favoriteBarber / a column from another table:
+--XXXX!!
+update a
+set barber = c.favoriteBarber
+from Appointment a
+	join Customer c
+		on c.customerId = a.customerId
+where c.name = 'Nathan'
+
+--TO add a new column to a table:
+Alter Table Customer
+Add FavoriteColor varchar(100) null
